@@ -1,0 +1,23 @@
+{% extends 'magasin/base.html' %}
+{% load static %}
+{% block title %}Commande - {{ produit.nom }}{% endblock %}
+{% block content %}
+<link rel="stylesheet" href="{% static 'magasin/style.css' %}">
+
+<div class="commande-wrapper">
+    <h2 class="commande-titre">Commander : {{ produit.nom }}</h2>
+
+    <div class="commande-details">
+        {% if produit.image %}
+            <img src="{{ produit.image.url }}" alt="{{ produit.nom }}" class="commande-image">
+        {% endif %}
+
+        <p><strong>Description :</strong> {{ produit.description }}</p>
+        <p><strong>Prix :</strong> {{ produit.prix }} FC</p>
+        <p><strong>Vendu par :</strong> @{{ produit.etudiant.user.username }}</p>
+        <p><strong>Contact du vendeur :</strong> {{ produit.etudiant.user.email }}</p>
+
+        <a href="{% url 'accueil' %}" class="btn-retour">← Retour à l'accueil</a>
+    </div>
+</div>
+{% endblock %}

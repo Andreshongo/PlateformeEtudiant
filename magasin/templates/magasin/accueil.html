@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Accueil - Plateforme Étudiant</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            margin: 0;
+        }
+
+        header {
+            background-color: #004080;
+            padding: 20px;
+            color: white;
+            text-align: center;
+            position: relative;
+        }
+
+        nav {
+            margin: 20px;
+            text-align: center;
+        }
+
+        nav a {
+            margin: 0 15px;
+            text-decoration: none;
+            color: #004080;
+            font-weight: bold;
+        }
+
+        nav a:hover {
+            text-decoration: underline;
+        }
+
+        .content {
+            text-align: center;
+            margin: 30px;
+        }
+
+        .produits {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .produit {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            width: 250px;
+            padding: 15px;
+            transition: transform 0.2s;
+        }
+
+        .produit:hover {
+            transform: scale(1.03);
+        }
+
+        .produit img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 5px;
+        }
+
+        .produit h3 {
+            margin: 10px 0 5px;
+            color: #333;
+        }
+
+        .produit p {
+            margin: 5px 0;
+            color: #555;
+        }
+
+        .btn-commander {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 10px 15px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        .btn-commander:hover {
+            background-color: #0056b3;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 60px;
+            padding: 20px;
+            background: #eee;
+            color: #666;
+        }
+
+        .boutiques-section {
+            margin: 60px auto;
+            max-width: 1000px;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .boutiques-section h1, .boutiques-section h2 {
+            text-align: center;
+            color: #333;
+        }
+
+        .boutique-produits {
+            margin-bottom: 30px;
+        }
+
+        .boutique-produits ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .boutique-produits li {
+            background-color: #f9f9f9;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+        }
+
+        .boutique-produits img {
+            margin-top: 10px;
+            border-radius: 5px;
+        }
+
+        /* Menu admin */
+        #adminMenu {
+            display: none;
+            position: absolute;
+            top: 60px;
+            right: 20px;
+            background: white;
+            border: 1px solid #ccc;
+            padding: 10px;
+            z-index: 10;
+        }
+
+        #adminMenu a {
+            color: #000;
+            text-decoration: none;
+        }
+
+        #adminMenu a:hover {
+            text-decoration: underline;
+        }
+
+        .menu-icon {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 24px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <h1>Bienvenue sur la Plateforme Étudiant</h1>
+    <p>Vente de livres, habits, et services entre étudiants</p>
+    <div class="menu-icon" onclick="toggleMenu()">⋮</div>
+    <div id="adminMenu">
+        <a href="{% url 'admin:login' %}">Administration</a>
+    </div>
+</header>
+
+<nav>
+    <a href="{% url 'inscription' %}">S'inscrire</a>
+    <a href="{% url 'connexion' %}">Se connecter</a>
+</nav>
+
+<div class="content">
+    <h2>Produits en vente</h2>
+
+    <div class="produits">
+        {% for produit in produits %}
+            <div class="produit">
+                {% if produit.image %}
+                    <img src="{{ produit.image.url }}" alt="Image de {{ produit.nom }}">
+                {% endif %}
+                <h3>{{ produit.nom }}</h3>
+                <p>{{ produit.description }}</p>
+                <p><strong>Prix :</strong> {{ produit.prix }} FC</p>
+                <p><em>Vendu par : @{{ produit.etudiant }}</em></p>
+                <a href="{% url 'commander' produit.id %}" class="btn-commander">Commander</a>
+            </div>
+        {% empty %}
+            <p>Aucun produit disponible pour le moment.</p>
+        {% endfor %}
+    </div>
+</div>
+
+<div class="boutiques-section">
+    <h1>Produits par boutique</h1>
+
+    {% for boutique in boutiques %}
+        <div class="boutique-produits">
+            <h2>{{ boutique.proprietaire.username }} - {{ boutique.nom }}</h2>
+            <ul>
+                {% for produit in boutique.produits.all %}
+                    <li>
+                        <strong>{{ produit.nom }}</strong> - {{ produit.description }} - {{ produit.prix }} FC
+                        {% if produit.image %}
+                            <br><img src="{{ produit.image.url }}" width="100">
+                        {% endif %}
+                    </li>
+                {% empty %}
+                    <li>Aucun produit pour cette boutique.</li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endfor %}
+</div>
+
+<footer>
+    &copy; {{ now|date:"Y" }} Plateforme Étudiant. Tous droits réservés.
+</footer>
+
+<script>
+    function toggleMenu() {
+        const menu = document.getElementById('adminMenu');
+        menu.style.display = (menu.style.display === 'block') ? 'none' : 'block';
+    }
+</script>
+</body>
+</html>

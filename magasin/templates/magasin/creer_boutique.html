@@ -1,0 +1,70 @@
+{% extends 'magasin/base.html' %}
+
+{% block title %}Créer ma boutique{% endblock %}
+
+{% block content %}
+<style>
+  .section-creer-boutique {
+      max-width: 500px;
+      margin: 50px auto;
+      background-color: #fff;
+      padding: 40px;
+      border-radius: 16px;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+  }
+
+  .section-creer-boutique h2 {
+      text-align: center;
+      margin-bottom: 30px;
+      font-size: 2em;
+      color: #333;
+  }
+
+  .section-creer-boutique form p {
+      margin-bottom: 20px;
+  }
+
+  .section-creer-boutique label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: bold;
+      color: #555;
+  }
+
+  .section-creer-boutique input,
+  .section-creer-boutique select,
+  .section-creer-boutique textarea {
+      width: 100%;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 1em;
+  }
+
+  .section-creer-boutique button {
+      margin-top: 20px;
+      width: 100%;
+      background-color: #007bff;
+      color: white;
+      padding: 12px;
+      font-size: 1em;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+  }
+
+  .section-creer-boutique button:hover {
+      background-color: #0056b3;
+  }
+</style>
+
+<div class="section-creer-boutique">
+    <h2>Créer ma boutique</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Créer ma boutique</button>
+    </form>
+</div>
+{% endblock %}

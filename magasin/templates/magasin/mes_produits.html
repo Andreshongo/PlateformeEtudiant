@@ -1,0 +1,103 @@
+{% extends "magasin/base.html" %}
+{% load static %}
+
+{% block content %}
+<style>
+    .mes-produits-section {
+        padding: 40px;
+        background-color: #f4f6f9;
+    }
+
+    .titre-section {
+        text-align: center;
+        font-size: 2em;
+        margin-bottom: 30px;
+    }
+
+    .grille-produits {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        justify-content: center;
+    }
+
+    .carte-produit {
+        background-color: white;
+        border-radius: 16px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        width: 260px;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        transition: transform 0.2s ease;
+    }
+
+    .carte-produit:hover {
+        transform: scale(1.03);
+    }
+
+    .carte-produit img {
+        width: 100%;
+        height: 160px;
+        object-fit: cover;
+        border-radius: 12px;
+        margin-bottom: 15px;
+    }
+
+    .carte-produit h4 {
+        font-size: 1.2em;
+        margin-bottom: 10px;
+        text-align: center;
+    }
+
+    .carte-produit p {
+        font-size: 0.9em;
+        color: #444;
+        text-align: center;
+        margin: 4px 0;
+    }
+
+    .carte-produit .actions {
+        margin-top: 10px;
+    }
+
+    .carte-produit .actions a {
+        margin: 0 8px;
+        text-decoration: none;
+        color: #007aff;
+        font-weight: bold;
+    }
+
+    .carte-produit .actions a:hover {
+        color: #005fcc;
+    }
+</style>
+
+<div class="mes-produits-section">
+    <h2 class="titre-section">Mes Produits</h2>
+
+    {% if produits %}
+        <div class="grille-produits">
+            {% for produit in produits %}
+                <div class="carte-produit">
+                    {% if produit.image %}
+                        <img src="{{ produit.image.url }}" alt="{{ produit.nom }}">
+                    {% else %}
+                        <p>[Aucune image]</p>
+                    {% endif %}
+                    <h4>{{ produit.nom }}</h4>
+                    <p><strong>{{ produit.prix }} FC</strong></p>
+                    <p>Boutique : {{ produit.boutique.nom }}</p>
+                    <div class="actions">
+                        <a href="{% url 'modifier_produit' produit.id %}">📝 Modifier</a> |
+                        <a href="{% url 'supprimer_produit' produit.id %}" onclick="return confirm('Confirmer la suppression ?')">🗑 Supprimer</a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p style="text-align:center; color: #777;">Vous n'avez ajouté aucun produit.</p>
+    {% endif %}
+</div>
+{% endblock %}

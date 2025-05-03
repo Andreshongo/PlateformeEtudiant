@@ -1,0 +1,192 @@
+{% extends "magasin/base.html" %}
+{% load static %}
+
+{% block content %}
+<style>
+    .messagerie-container {
+        display: flex;
+        gap: 30px;
+        margin-top: 30px;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 16px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+    }
+
+    .etudiants-list {
+        width: 25%;
+        border-right: 2px solid #eee;
+        padding-right: 15px;
+    }
+
+    .etudiants-list h3 {
+        font-size: 1.3em;
+        margin-bottom: 15px;
+    }
+
+    .etudiants-list ul {
+        list-style: none;
+        padding: 0;
+    }
+
+    .etudiants-list li button {
+        background-color: #f1f4f9;
+        border: none;
+        padding: 10px;
+        width: 100%;
+        margin-bottom: 8px;
+        text-align: left;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: background 0.3s ease;
+    }
+
+    .etudiants-list li button:hover {
+        background-color: #e0e7ff;
+    }
+
+    .formulaire-message {
+        width: 75%;
+    }
+
+    .formulaire-message form {
+        background-color: #f9fafc;
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.04);
+    }
+
+    .formulaire-message textarea,
+    .formulaire-message input[type="text"],
+    .formulaire-message input[type="file"] {
+        width: 100%;
+        padding: 10px;
+        margin-top: 5px;
+        margin-bottom: 15px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        font-size: 1em;
+    }
+
+    .formulaire-message button {
+        padding: 10px 20px;
+        background-color: #007aff;
+        border: none;
+        color: white;
+        font-size: 1em;
+        border-radius: 10px;
+        cursor: pointer;
+    }
+
+    .formulaire-message button:hover {
+        background-color: #005fcc;
+    }
+
+    .message-box {
+        margin-top: 25px;
+    }
+
+    .message-box h3 {
+        margin-top: 30px;
+        font-size: 1.2em;
+    }
+
+    .message-item {
+        border: 1px solid #ddd;
+        background-color: #fff;
+        padding: 15px;
+        margin: 10px 0;
+        border-radius: 10px;
+    }
+
+    .message-item.sent {
+        background-color: #f0f8ff;
+    }
+
+    .message-item strong {
+        display: inline-block;
+        width: 80px;
+    }
+
+    .no-message {
+        color: #999;
+        font-style: italic;
+    }
+</style>
+
+<h2 style="text-align: center;">Messagerie électronique</h2>
+
+<div class="messagerie-container">
+
+    <!-- Liste des étudiants -->
+    <div class="etudiants-list">
+        <h3>Étudiants</h3>
+        <ul id="listeEtudiants">
+            {% for etu in etudiants %}
+                <li>
+                    <button type="button" onclick="selectionnerDestinataire('{{ etu.user.id }}', '{{ etu.user.email }}')">
+                        {{ etu.prenom }} {{ etu.nom }}
+                    </button>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <!-- Formulaire + messages -->
+    <div class="formulaire-message">
+        <h3>Envoyer un message</h3>
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="hidden" name="destinataire_id" id="destinataire_id">
+
+            <label>Email du destinataire :</label>
+            <input type="text" id="email_destinataire" disabled>
+
+            <label>Message :</label>
+            <textarea name="contenu" rows="5" required></textarea>
+
+            <label>Fichier joint :</label>
+            <input type="file" name="fichier_joint">
+
+            <button type="submit">Envoyer</button>
+        </form>
+
+        <div class="message-box">
+            <h3>Messages reçus</h3>
+            {% for msg in messages_recus %}
+                <div class="message-item">
+                    <strong>De :</strong> {{ msg.expediteur.username }}<br>
+                    <strong>Message :</strong> {{ msg.contenu }}<br>
+                    {% if msg.fichier_joint %}
+                        <strong>Fichier :</strong> <a href="{{ msg.fichier_joint.url }}" target="_blank">Voir</a><br>
+                    {% endif %}
+                    <em>Envoyé le {{ msg.date_envoi }}</em>
+                </div>
+            {% empty %}
+                <p class="no-message">Aucun message reçu.</p>
+            {% endfor %}
+
+            <h3>Messages envoyés</h3>
+            {% for msg in messages_envoyes %}
+                <div class="message-item sent">
+                    <strong>À :</strong> {{ msg.destinataire.username }}<br>
+                    <strong>Message :</strong> {{ msg.contenu }}<br>
+                    {% if msg.fichier_joint %}
+                        <strong>Fichier :</strong> <a href="{{ msg.fichier_joint.url }}" target="_blank">Voir</a><br>
+                    {% endif %}
+                    <em>Envoyé le {{ msg.date_envoi }}</em>
+                </div>
+            {% empty %}
+                <p class="no-message">Aucun message envoyé.</p>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<script>
+    function selectionnerDestinataire(userId, email) {
+        document.getElementById('destinataire_id').value = userId;
+        document.getElementById('email_destinataire').value = email;
+    }
+</script>
+{% endblock %}

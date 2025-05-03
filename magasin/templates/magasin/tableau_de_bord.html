@@ -1,0 +1,83 @@
+<!-- magasin/templates/magasin/tableau_de_bord.html -->
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Tableau de bord étudiant</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f4f6f8;
+            color: #333;
+        }
+
+        header {
+            background: linear-gradient(90deg, #4a90e2, #007aff);
+            color: white;
+            padding: 30px 0;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2.5em;
+        }
+
+        main {
+            max-width: 600px;
+            margin: 40px auto;
+            padding: 30px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        main p {
+            font-size: 1.2em;
+            margin-bottom: 20px;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        ul li {
+            margin: 15px 0;
+        }
+
+        ul li a {
+            display: block;
+            padding: 15px;
+            background-color: #007aff;
+            color: white;
+            text-decoration: none;
+            border-radius: 12px;
+            font-size: 1.1em;
+            transition: background-color 0.3s ease;
+        }
+
+        ul li a:hover {
+            background-color: #005fcc;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Bienvenue, {{ user.username|title }}</h1>
+    </header>
+    <main>
+        <p>Ceci est votre espace personnel étudiant.</p>
+        <ul>
+            <li><a href="{% url 'creer_boutique' %}">Créer ma boutique</a></li>
+            <li><a href="{% url 'ajouter_produit' %}">Ajouter vos produits</a></li>
+            <li><a href="{% url 'mes_produits' %}">Consulter mes produits</a></li>
+            <li><a href="{% url 'messagerie' %}">Messagerie</a></li>
+            <li><a href="{% url 'logout' %}">Déconnexion</a></li>
+        </ul>
+    </main>
+</body>
+</html>

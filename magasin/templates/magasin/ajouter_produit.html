@@ -1,0 +1,71 @@
+{% extends "magasin/base.html" %}
+{% load static %}
+
+{% block title %}Ajouter un produit{% endblock %}
+
+{% block content %}
+<style>
+    .form-ajouter-produit {
+        max-width: 600px;
+        margin: 50px auto;
+        padding: 40px;
+        background-color: #ffffff;
+        border-radius: 16px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-ajouter-produit h2 {
+        text-align: center;
+        color: #2c3e50;
+        margin-bottom: 30px;
+        font-size: 2em;
+    }
+
+    .form-ajouter-produit form p {
+        margin-bottom: 20px;
+    }
+
+    .form-ajouter-produit label {
+        font-weight: bold;
+        display: block;
+        margin-bottom: 6px;
+        color: #34495e;
+    }
+
+    .form-ajouter-produit input,
+    .form-ajouter-produit select,
+    .form-ajouter-produit textarea {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        font-size: 1em;
+    }
+
+    .form-ajouter-produit button {
+        width: 100%;
+        padding: 14px;
+        background-color: #28a745;
+        color: white;
+        border: none;
+        font-size: 1.1em;
+        border-radius: 10px;
+        cursor: pointer;
+        margin-top: 20px;
+        transition: background-color 0.3s ease;
+    }
+
+    .form-ajouter-produit button:hover {
+        background-color: #218838;
+    }
+</style>
+
+<div class="form-ajouter-produit">
+    <h2>Ajouter un produit</h2>
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Ajouter</button>
+    </form>
+</div>
+{% endblock %}

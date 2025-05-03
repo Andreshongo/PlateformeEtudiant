@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Connexion</title>
+</head>
+<body>
+{% extends 'magasin/base.html' %}
+{% load static %}
+
+{% block title %}Connexion{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'magasin/style.css' %}">
+
+<div class="connexion-container">
+    <h2>Se connecter</h2>
+    {% if error %}
+        <p class="error-message">{{ error }}</p>
+    {% endif %}
+    <form method="post" class="connexion-form">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="username">Nom d'utilisateur</label>
+            <input type="text" name="username" id="username" required>
+        </div>
+
+        <div class="form-group">
+            <label for="password">Mot de passe</label>
+            <input type="password" name="password" id="password" required>
+        </div>
+
+        <button type="submit" class="btn-connexion">Connexion</button>
+    </form>
+</div>
+{% endblock %}
+
+</body>
+</html>
